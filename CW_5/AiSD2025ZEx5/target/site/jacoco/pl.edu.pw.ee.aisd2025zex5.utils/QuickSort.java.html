@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>QuickSort.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AiSD2025ZEx5</a> &gt; <a href="index.source.html" class="el_package">pl.edu.pw.ee.aisd2025zex5.utils</a> &gt; <span class="el_source">QuickSort.java</span></div><h1>QuickSort.java</h1><pre class="source lang-java linenums">package pl.edu.pw.ee.aisd2025zex5.utils;
+
+
+import java.util.List;
+
+<span class="nc" id="L6">public class QuickSort {</span>
+
+    // qsort lomuto - do sortowania listy wezlow wg czestotliwosci
+    public static void qsort(List&lt;Node&gt; nodeList, int low, int high) {
+<span class="fc bfc" id="L10" title="All 2 branches covered.">        if (low &lt; high) {</span>
+<span class="fc" id="L11">            int pivotIndex = partition(nodeList, low, high);</span>
+<span class="fc" id="L12">            qsort(nodeList, low, pivotIndex - 1);</span>
+<span class="fc" id="L13">            qsort(nodeList, pivotIndex + 1, high);</span>
+        }
+<span class="fc" id="L15">    }</span>
+
+    
+    private static int partition(List&lt;Node&gt; nodeList, int low, int high) {
+<span class="fc" id="L19">        Node pivot = nodeList.get(high);</span>
+<span class="fc" id="L20">        int i = low - 1;</span>
+
+<span class="fc bfc" id="L22" title="All 2 branches covered.">        for (int j = low; j &lt; high; j++) {</span>
+<span class="fc bfc" id="L23" title="All 2 branches covered.">            if (nodeList.get(j).frequency &lt;= pivot.frequency) {</span>
+<span class="fc" id="L24">                i++;</span>
+<span class="fc" id="L25">                Node temp = nodeList.get(i);</span>
+<span class="fc" id="L26">                nodeList.set(i, nodeList.get(j));</span>
+<span class="fc" id="L27">                nodeList.set(j, temp);</span>
+            }
+        }
+
+<span class="fc" id="L31">        Node temp = nodeList.get(i + 1);</span>
+<span class="fc" id="L32">        nodeList.set(i + 1, nodeList.get(high));</span>
+<span class="fc" id="L33">        nodeList.set(high, temp);</span>
+
+<span class="fc" id="L35">        return i + 1;</span>
+    }
+}
+
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

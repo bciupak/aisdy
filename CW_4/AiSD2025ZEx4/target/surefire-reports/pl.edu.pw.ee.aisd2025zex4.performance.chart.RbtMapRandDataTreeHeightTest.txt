@@ -1,0 +1,4 @@
+-------------------------------------------------------------------------------
+Test set: pl.edu.pw.ee.aisd2025zex4.performance.chart.RbtMapRandDataTreeHeightTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 5.761 s -- in pl.edu.pw.ee.aisd2025zex4.performance.chart.RbtMapRandDataTreeHeightTest

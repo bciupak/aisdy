@@ -1,0 +1,130 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>FileOutputHandler.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AiSD2025ZEx5</a> &gt; <a href="index.source.html" class="el_package">pl.edu.pw.ee.aisd2025zex5.utils</a> &gt; <span class="el_source">FileOutputHandler.java</span></div><h1>FileOutputHandler.java</h1><pre class="source lang-java linenums">package pl.edu.pw.ee.aisd2025zex5.utils;
+
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.FileReader;
+import java.io.FileWriter;
+import java.io.IOException;
+
+<span class="nc" id="L10">public class FileOutputHandler {</span>
+    public static StringBuilder processEncodedData(StringBuilder encodedData) {
+<span class="fc" id="L12">        int totalBits = encodedData.length();</span>
+<span class="fc" id="L13">        totalBits += 3; // dodatkowe 3 bity do paddingu</span>
+
+<span class="fc" id="L15">        int remainder = (totalBits % 8);</span>
+<span class="fc" id="L16">        int extraBits = (8 - remainder) % 8;</span>
+
+<span class="fc" id="L18">        String extraBitsBinary = String.format(&quot;%3s&quot;, Integer.toBinaryString(extraBits)).replace(' ', '0');</span>
+
+<span class="fc" id="L20">        StringBuilder finalEncodedData = new StringBuilder();</span>
+<span class="fc" id="L21">        finalEncodedData.append(extraBitsBinary);</span>
+<span class="fc" id="L22">        finalEncodedData.append(encodedData);</span>
+
+<span class="fc bfc" id="L24" title="All 2 branches covered.">        for (int i = 0; i &lt; extraBits; i++) {</span>
+<span class="fc" id="L25">            finalEncodedData.append('0');</span>
+        }
+
+<span class="fc" id="L28">        return finalEncodedData;</span>
+    }
+
+
+    public static void writeFile(String outputFilePath, String[] tokens, String[] codes, int unique, int l, StringBuilder finalEncodedData) throws IOException {
+<span class="fc" id="L33">        try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFilePath))) {</span>
+<span class="fc" id="L34">            bw.write(&quot;l:&quot; + l);</span>
+<span class="fc" id="L35">            bw.newLine();</span>
+<span class="fc" id="L36">            bw.write(&quot;tokens:&quot; + unique);</span>
+<span class="fc" id="L37">            bw.newLine();</span>
+<span class="fc bfc" id="L38" title="All 2 branches covered.">            for (int i = 0; i &lt; unique; i++) {</span>
+<span class="pc bpc" id="L39" title="1 of 2 branches missed.">                String token = tokens[i] == null ? &quot;&quot; : tokens[i];</span>
+<span class="fc" id="L40">                bw.write(token + &quot;==&quot; + codes[i]);</span>
+<span class="fc" id="L41">                bw.newLine();</span>
+            }
+<span class="fc" id="L43">            bw.write(&quot;DATA&quot;);</span>
+<span class="fc" id="L44">            bw.newLine();</span>
+<span class="fc" id="L45">            bw.write(finalEncodedData.toString());</span>
+<span class="fc" id="L46">        } catch (IOException e) {</span>
+<span class="fc" id="L47">            System.out.println(&quot;Wystapil blad podczas zapisywania pliku: &quot; + e.getMessage());</span>
+<span class="fc" id="L48">        }</span>
+<span class="fc" id="L49">    }</span>
+
+    public static void printToConsole(StringBuilder finalEncodedData) {
+<span class="nc" id="L52">        System.out.println(&quot;Zakodowane dane:&quot;);</span>
+<span class="nc" id="L53">        System.out.println(finalEncodedData.toString());</span>
+<span class="nc" id="L54">    }</span>
+
+
+
+    
+    public static void decodeFile(String inputFilePath, String outputFilePath) throws IOException {
+        // sprawdzanie naglowka
+<span class="fc" id="L61">        try (BufferedReader br = new BufferedReader(new FileReader(inputFilePath))) {</span>
+<span class="fc" id="L62">            String line = br.readLine();</span>
+<span class="pc bpc" id="L63" title="2 of 4 branches missed.">            if (line == null || !line.startsWith(&quot;l:&quot;)) throw new IOException(&quot;Niepoprawny format pliku wejściowego&quot;); </span>
+<span class="fc" id="L64">            int l = Integer.parseInt(line.substring(2));</span>
+<span class="fc" id="L65">            line = br.readLine();</span>
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">            if (line == null || !line.startsWith(&quot;tokens:&quot;)) throw new IOException(&quot;Niepoprawny format pliku wejściowego&quot;);</span>
+<span class="fc" id="L67">            int unique = Integer.parseInt(line.substring(7));</span>
+
+<span class="fc" id="L69">            java.util.List&lt;String&gt; codesList = new java.util.ArrayList&lt;&gt;();</span>
+<span class="fc" id="L70">            java.util.List&lt;String&gt; tokensList = new java.util.ArrayList&lt;&gt;();</span>
+
+            // read token==code lines until DATA marker (more robust to blank lines)
+<span class="pc bpc" id="L73" title="1 of 2 branches missed.">            while ((line = br.readLine()) != null) {</span>
+<span class="fc bfc" id="L74" title="All 2 branches covered.">                if (line.equals(&quot;DATA&quot;)) break;</span>
+<span class="fc" id="L75">                int sep = line.indexOf(&quot;==&quot;);</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">                if (sep == -1) {</span>
+<span class="nc" id="L77">                    tokensList.add(&quot;&quot;);</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                    codesList.add(line == null ? &quot;&quot; : line);</span>
+                } else {
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">                    if (sep == 0) {</span>
+                        // empty prefix (line starts with '==') represents a newline token
+<span class="nc" id="L82">                        tokensList.add(&quot;\n&quot;);</span>
+                    } else {
+<span class="fc" id="L84">                        tokensList.add(line.substring(0, sep));</span>
+                    }
+<span class="fc" id="L86">                    codesList.add(line.substring(sep + 2));</span>
+                }
+<span class="fc" id="L88">            }</span>
+
+<span class="pc bpc" id="L90" title="2 of 4 branches missed.">            if (line == null || !line.equals(&quot;DATA&quot;)) throw new IOException(&quot;Brak sekcji DATA&quot;);</span>
+
+<span class="fc" id="L92">            String[] codes = codesList.toArray(new String[0]);</span>
+<span class="fc" id="L93">            String[] tokens = tokensList.toArray(new String[0]);</span>
+<span class="fc" id="L94">            int uniqueRead = codes.length;</span>
+
+<span class="fc" id="L96">            StringBuilder bits = new StringBuilder();</span>
+            String dataLine;
+<span class="fc bfc" id="L98" title="All 2 branches covered.">            while ((dataLine = br.readLine()) != null) {</span>
+<span class="fc" id="L99">                bits.append(dataLine);</span>
+            }
+
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">            if (bits.length() &lt; 3) throw new IOException(&quot;Niepoprawne dane zakodowane&quot;);</span>
+<span class="fc" id="L103">            int extraBits = Integer.parseInt(bits.substring(0, 3), 2);</span>
+<span class="fc" id="L104">            String bitStream = bits.substring(3, bits.length() - extraBits);</span>
+
+<span class="fc" id="L106">            StringBuilder output = new StringBuilder();</span>
+<span class="fc" id="L107">            StringBuilder current = new StringBuilder();</span>
+<span class="fc bfc" id="L108" title="All 2 branches covered.">            for (int i = 0; i &lt; bitStream.length(); i++) {</span>
+<span class="fc" id="L109">                current.append(bitStream.charAt(i));</span>
+<span class="fc" id="L110">                String cur = current.toString();</span>
+                
+<span class="fc bfc" id="L112" title="All 2 branches covered.">                for (int j = 0; j &lt; uniqueRead; j++) {</span>
+<span class="pc bpc" id="L113" title="1 of 4 branches missed.">                    if (codes[j] != null &amp;&amp; codes[j].equals(cur)) {</span>
+<span class="fc" id="L114">                        output.append(tokens[j]);</span>
+<span class="fc" id="L115">                        current.setLength(0);</span>
+<span class="fc" id="L116">                        break;</span>
+                    }
+                }
+            }
+
+<span class="fc" id="L121">            try (BufferedWriter bw = new BufferedWriter(new FileWriter(outputFilePath))) {</span>
+<span class="fc" id="L122">                bw.write(output.toString());</span>
+            }
+        }
+<span class="fc" id="L125">    }</span>
+
+    
+
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

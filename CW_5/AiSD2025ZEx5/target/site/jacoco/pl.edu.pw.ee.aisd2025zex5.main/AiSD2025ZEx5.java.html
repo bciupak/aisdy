@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AiSD2025ZEx5.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">AiSD2025ZEx5</a> &gt; <a href="index.source.html" class="el_package">pl.edu.pw.ee.aisd2025zex5.main</a> &gt; <span class="el_source">AiSD2025ZEx5.java</span></div><h1>AiSD2025ZEx5.java</h1><pre class="source lang-java linenums">package pl.edu.pw.ee.aisd2025zex5.main;
+import pl.edu.pw.ee.aisd2025zex5.utils.Node;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import pl.edu.pw.ee.aisd2025zex5.utils.*;
+
+
+<span class="nc" id="L9">public class AiSD2025ZEx5 {</span>
+    public static void main(String[] args) {
+        try {
+<span class="nc" id="L12">            run(args);</span>
+<span class="nc" id="L13">        } catch (IllegalArgumentException | IOException e) {</span>
+<span class="nc" id="L14">            System.err.println(e.getMessage());</span>
+<span class="nc" id="L15">            System.exit(1);</span>
+<span class="nc" id="L16">        }</span>
+<span class="nc" id="L17">    }</span>
+
+    static void run(String[] args) throws IOException {
+<span class="fc" id="L20">        String mode = null; // comp or decomp</span>
+<span class="fc" id="L21">        String inputFilePath = null;</span>
+<span class="fc" id="L22">        String outputFilePath = null;</span>
+<span class="fc" id="L23">        int l = 1;</span>
+
+<span class="fc bfc" id="L25" title="All 2 branches covered.">        for (int i = 0; i &lt; args.length; i++) {</span>
+<span class="pc bpc" id="L26" title="1 of 5 branches missed.">            switch (args[i]) {</span>
+                case &quot;-m&quot;:
+<span class="pc bpc" id="L28" title="1 of 2 branches missed.">                    if (i + 1 &lt; args.length) {</span>
+<span class="fc" id="L29">                        mode = args[i + 1];</span>
+<span class="fc" id="L30">                        i++;</span>
+                    } else {
+<span class="nc" id="L32">                        throw new IllegalArgumentException(&quot;Brak wartości po -m&quot;);</span>
+                    }
+                    break;
+                case &quot;-s&quot;:
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">                    if (i + 1 &lt; args.length) {</span>
+<span class="fc" id="L37">                        inputFilePath = args[i + 1];</span>
+<span class="fc" id="L38">                        i++;</span>
+                    } else {
+<span class="nc" id="L40">                        throw new IllegalArgumentException(&quot;Brak ścieżki po -s&quot;);</span>
+                    }
+                    break;
+                case &quot;-d&quot;:
+<span class="pc bpc" id="L44" title="1 of 2 branches missed.">                    if (i + 1 &lt; args.length) {</span>
+<span class="fc" id="L45">                        outputFilePath = args[i + 1];</span>
+<span class="fc" id="L46">                        i++;</span>
+                    } else {
+<span class="nc" id="L48">                        throw new IllegalArgumentException(&quot;Brak ścieżki po -d&quot;);</span>
+                    }
+                    break;
+                case &quot;-l&quot;:
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">                    if (i + 1 &lt; args.length) {</span>
+                        try {
+<span class="fc" id="L54">                            l = Integer.parseInt(args[i + 1]);</span>
+<span class="nc" id="L55">                        } catch (NumberFormatException ex) {</span>
+<span class="nc" id="L56">                            throw new IllegalArgumentException(&quot;Nieprawidłowa wartość -l&quot;);</span>
+<span class="fc" id="L57">                        }</span>
+<span class="fc bfc" id="L58" title="All 2 branches covered.">                        if (l &lt;= 0) throw new IllegalArgumentException(&quot;-l musi być &gt;= 1&quot;);</span>
+<span class="fc" id="L59">                        i++;</span>
+                    } else {
+<span class="nc" id="L61">                        throw new IllegalArgumentException(&quot;Brak wartości po -l&quot;);</span>
+                    }
+                    break;
+                default:
+<span class="nc" id="L65">                    throw new IllegalArgumentException(&quot;Nieznany argument: &quot; + args[i]);</span>
+            }
+        }
+
+<span class="fc bfc" id="L69" title="All 2 branches covered.">        if (mode == null) throw new IllegalArgumentException(&quot;Proszę podać tryb -m comp|decomp&quot;);</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">        if (inputFilePath == null) throw new IllegalArgumentException(&quot;Proszę podać ścieżkę wejściową -s&quot;);</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">        if (outputFilePath == null) throw new IllegalArgumentException(&quot;Proszę podać ścieżkę wyjściową -d&quot;);</span>
+
+       
+<span class="fc" id="L74">        Path inputPath = Path.of(inputFilePath);</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">        if (!Files.exists(inputPath)) {</span>
+<span class="nc" id="L76">            throw new IllegalArgumentException(&quot;Plik wejściowy nie istnieje: &quot; + inputFilePath);</span>
+        }
+
+<span class="fc bfc" id="L79" title="All 2 branches covered.">        if (mode.equals(&quot;comp&quot;)) {</span>
+<span class="fc" id="L80">            compress(inputFilePath, outputFilePath, l);</span>
+<span class="fc" id="L81">            System.out.println(&quot;Kompresja zakończona: &quot; + outputFilePath);</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">        } else if (mode.equals(&quot;decomp&quot;)) {</span>
+<span class="fc" id="L83">            decompress(inputFilePath, outputFilePath);</span>
+<span class="fc" id="L84">            System.out.println(&quot;Dekompresja zakończona: &quot; + outputFilePath);</span>
+        } else {
+<span class="nc" id="L86">            throw new IllegalArgumentException(&quot;Nieznany tryb: &quot; + mode);</span>
+        }
+<span class="fc" id="L88">    }</span>
+
+    private static void compress(String inputFilePath, String outputFilePath, int l) throws IOException {
+<span class="fc" id="L91">        String[] tokens = new String[65536];</span>
+<span class="fc" id="L92">        int[] counts = new int[65536];</span>
+<span class="fc" id="L93">        int unique = FileInputHandler.readFile(inputFilePath, tokens, counts, l);</span>
+
+<span class="fc" id="L95">        Node root = HuffmanTreeBuilder.buildHuffmanTree(tokens, counts, unique);</span>
+<span class="fc" id="L96">        String[] codes = new String[unique];</span>
+<span class="fc" id="L97">        HuffmanCodeGenerator.generateCodes(root, &quot;&quot;, tokens, codes, unique);</span>
+
+<span class="fc" id="L99">        StringBuilder encoded = new StringBuilder();</span>
+<span class="fc" id="L100">        FileInputHandler.encodeFile(inputFilePath, tokens, codes, encoded, l);</span>
+
+<span class="fc" id="L102">        StringBuilder finalBits = FileOutputHandler.processEncodedData(encoded);</span>
+<span class="fc" id="L103">        FileOutputHandler.writeFile(outputFilePath, tokens, codes, unique, l, finalBits);</span>
+<span class="fc" id="L104">    }</span>
+
+    private static void decompress(String inputFilePath, String outputFilePath) throws IOException {
+<span class="fc" id="L107">        FileOutputHandler.decodeFile(inputFilePath, outputFilePath);</span>
+<span class="fc" id="L108">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

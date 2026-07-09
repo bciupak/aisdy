@@ -1,0 +1,11 @@
+-------------------------------------------------------------------------------
+Test set: pl.edu.pw.ee.aisd2025zex1.sorters.performance.charts.PerformanceChartsTest
+-------------------------------------------------------------------------------
+Tests run: 1, Failures: 0, Errors: 1, Skipped: 0, Time elapsed: 0.128 s <<< FAILURE! -- in pl.edu.pw.ee.aisd2025zex1.sorters.performance.charts.PerformanceChartsTest
+pl.edu.pw.ee.aisd2025zex1.sorters.performance.charts.PerformanceChartsTest.runAllPerformanceCharts -- Time elapsed: 0.095 s <<< ERROR!
+java.lang.ArrayIndexOutOfBoundsException: Index 1000 out of bounds for length 1000
+	at pl.edu.pw.ee.aisd2025zex1.sorters.countingsort.CountingSort.sort(CountingSort.java:41)
+	at pl.edu.pw.ee.aisd2025zex1.sorters.performance.charts.PerformanceChartsTest$1.sort(PerformanceChartsTest.java:64)
+	at pl.edu.pw.ee.aisd2025zex1.sorters.performance.charts.PerformanceChartsTest.runPerformanceFor(PerformanceChartsTest.java:173)
+	at pl.edu.pw.ee.aisd2025zex1.sorters.performance.charts.PerformanceChartsTest.runAllPerformanceCharts(PerformanceChartsTest.java:148)
+
